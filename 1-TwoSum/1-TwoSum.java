@@ -1,28 +1,12 @@
-// Last updated: 7/17/2026, 2:56:51 PM
-1/**
-2 * Definition for a binary tree node.
-3 * public class TreeNode {
-4 *     int val;
-5 *     TreeNode left;
-6 *     TreeNode right;
-7 *     TreeNode() {}
-8 *     TreeNode(int val) { this.val = val; }
-9 *     TreeNode(int val, TreeNode left, TreeNode right) {
-10 *         this.val = val;
-11 *         this.left = left;
-12 *         this.right = right;
-13 *     }
-14 * }
-15 */
-16class Solution {
-17    public boolean hasPathSum(TreeNode root, int targetSum) {
-18        if (root == null) {
-19            return false;
-20        }
-21        if (root.left == null && root.right == null) {
-22            return targetSum == root.val;
-23        }
-24        int remainingSum = targetSum - root.val;
-25        return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);
-26    }
-27}
+// Last updated: 7/17/2026, 2:59:54 PM
+1class Solution {
+2    public int reverseBits(int n) {
+3        int result = 0;
+4        for (int i = 0; i < 32; i++) {
+5            result <<= 1;
+6            result |= (n & 1);
+7            n >>>= 1;
+8        }
+9        return result;
+10    }
+11}
