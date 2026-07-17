@@ -1,23 +1,31 @@
-// Last updated: 7/17/2026, 2:49:53 PM
-1class Solution {
-2    public String addBinary(String a, String b) {
-3        StringBuilder result = new StringBuilder();
-4        int i = a.length() - 1;
-5        int j = b.length() - 1;
-6        int carry = 0;
-7        while (i >= 0 || j >= 0 || carry > 0) {
-8            int sum = carry;
-9            if (i >= 0) {
-10                sum += a.charAt(i) - '0'; 
-11                i--;
-12            }
-13            if (j >= 0) {
-14                sum += b.charAt(j) - '0';
-15                j--;
-16            }
-17            result.append(sum % 2);
-18            carry = sum / 2;
-19        }
-20        return result.reverse().toString();
-21    }
-22}
+// Last updated: 7/17/2026, 2:54:25 PM
+1/**
+2 * Definition for a binary tree node.
+3 * public class TreeNode {
+4 *     int val;
+5 *     TreeNode left;
+6 *     TreeNode right;
+7 *     TreeNode() {}
+8 *     TreeNode(int val) { this.val = val; }
+9 *     TreeNode(int val, TreeNode left, TreeNode right) {
+10 *         this.val = val;
+11 *         this.left = left;
+12 *         this.right = right;
+13 *     }
+14 * }
+15 */
+16class Solution {
+17    public TreeNode sortedArrayToBST(int[] nums) {
+18        return helper(nums, 0, nums.length - 1);
+19    }
+20    private TreeNode helper(int[] nums, int left, int right) {
+21        if (left > right) {
+22            return null;
+23        }
+24        int mid = left + (right - left) / 2;
+25        TreeNode root = new TreeNode(nums[mid]);
+26        root.left = helper(nums, left, mid - 1);
+27        root.right = helper(nums, mid + 1, right);
+28        return root;
+29    }
+30}
