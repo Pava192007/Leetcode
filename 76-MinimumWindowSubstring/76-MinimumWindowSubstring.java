@@ -1,0 +1,41 @@
+// Last updated: 7/17/2026, 9:09:59 AM
+class Solution {
+    static{
+        for(int i = 0; i < 300; i++){
+            minWindow("","");
+        }
+    }
+    public static String minWindow(String s, String t) {
+        int sLen = s.length();
+        int tLen = t.length();
+        if(sLen < tLen || sLen == 0 || tLen == 0) return "";
+
+        int[] freq = new int[128];
+        for(char c : t.toCharArray()){
+            freq[c]++;
+        }
+        
+        int left = 0, right = 0, minStart = 0;
+        int minLen = Integer.MAX_VALUE;
+        int required = tLen;
+        char[] charS = s.toCharArray(); 
+
+        while(right < sLen){
+            if(freq[charS[right]]-- > 0){
+                required--;
+            }
+            while(required == 0){
+                if(right - left + 1 < minLen){
+                    minLen = right - left + 1;
+                    minStart = left;
+                }
+                if(++freq[charS[left]] > 0){
+                    required++;
+                }
+                left++;
+            }
+            right++;
+        }
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+    }
+}
