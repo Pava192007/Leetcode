@@ -1,0 +1,27 @@
+// Last updated: 7/17/2026, 9:08:37 AM
+import java.util.*;
+
+class Solution {
+    public String largestNumber(int[] nums) {
+
+        String[] arr = new String[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = String.valueOf(nums[i]);
+        }
+
+        Arrays.sort(arr, (a, b) -> (b + a).compareTo(a + b));
+
+        if (arr[0].equals("0")) {
+            return "0";
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        for (String s : arr) {
+            result.append(s);
+        }
+
+        return result.toString();
+    }
+}
