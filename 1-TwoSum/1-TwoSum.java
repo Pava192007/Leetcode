@@ -1,4 +1,4 @@
-// Last updated: 7/17/2026, 2:55:52 PM
+// Last updated: 7/17/2026, 2:56:51 PM
 1/**
 2 * Definition for a binary tree node.
 3 * public class TreeNode {
@@ -15,24 +15,14 @@
 14 * }
 15 */
 16class Solution {
-17    public boolean isBalanced(TreeNode root) {
-18        return checkHeight(root) != -1;
-19    }
-20    private int checkHeight(TreeNode node) {
-21        if (node == null) {
-22            return 0;
+17    public boolean hasPathSum(TreeNode root, int targetSum) {
+18        if (root == null) {
+19            return false;
+20        }
+21        if (root.left == null && root.right == null) {
+22            return targetSum == root.val;
 23        }
-24        int leftHeight = checkHeight(node.left);
-25        if (leftHeight == -1) {
-26            return -1; 
-27        }
-28        int rightHeight = checkHeight(node.right);
-29        if (rightHeight == -1) {
-30            return -1; 
-31        }
-32        if (Math.abs(leftHeight - rightHeight) > 1) {
-33            return -1;
-34        }
-35        return Math.max(leftHeight, rightHeight) + 1;
-36    }
-37}
+24        int remainingSum = targetSum - root.val;
+25        return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum);
+26    }
+27}
