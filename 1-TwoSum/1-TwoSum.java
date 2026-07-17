@@ -1,14 +1,23 @@
-// Last updated: 7/17/2026, 2:48:15 PM
+// Last updated: 7/17/2026, 2:49:53 PM
 1class Solution {
-2    public int[] twoSum(int[] nums, int target) {
-3        Map<Integer, Integer> numMap = new HashMap<>();
-4        for (int i = 0; i < nums.length; i++) {
-5            int complement = target - nums[i];
-6            if (numMap.containsKey(complement)) {
-7                return new int[] { numMap.get(complement), i };
-8            }
-9            numMap.put(nums[i], i);
-10        }
-11        throw new IllegalArgumentException("No two sum solution");
-12    }
-13}
+2    public String addBinary(String a, String b) {
+3        StringBuilder result = new StringBuilder();
+4        int i = a.length() - 1;
+5        int j = b.length() - 1;
+6        int carry = 0;
+7        while (i >= 0 || j >= 0 || carry > 0) {
+8            int sum = carry;
+9            if (i >= 0) {
+10                sum += a.charAt(i) - '0'; 
+11                i--;
+12            }
+13            if (j >= 0) {
+14                sum += b.charAt(j) - '0';
+15                j--;
+16            }
+17            result.append(sum % 2);
+18            carry = sum / 2;
+19        }
+20        return result.reverse().toString();
+21    }
+22}
