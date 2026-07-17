@@ -1,4 +1,4 @@
-// Last updated: 7/17/2026, 2:54:25 PM
+// Last updated: 7/17/2026, 2:55:52 PM
 1/**
 2 * Definition for a binary tree node.
 3 * public class TreeNode {
@@ -15,17 +15,24 @@
 14 * }
 15 */
 16class Solution {
-17    public TreeNode sortedArrayToBST(int[] nums) {
-18        return helper(nums, 0, nums.length - 1);
+17    public boolean isBalanced(TreeNode root) {
+18        return checkHeight(root) != -1;
 19    }
-20    private TreeNode helper(int[] nums, int left, int right) {
-21        if (left > right) {
-22            return null;
+20    private int checkHeight(TreeNode node) {
+21        if (node == null) {
+22            return 0;
 23        }
-24        int mid = left + (right - left) / 2;
-25        TreeNode root = new TreeNode(nums[mid]);
-26        root.left = helper(nums, left, mid - 1);
-27        root.right = helper(nums, mid + 1, right);
-28        return root;
-29    }
-30}
+24        int leftHeight = checkHeight(node.left);
+25        if (leftHeight == -1) {
+26            return -1; 
+27        }
+28        int rightHeight = checkHeight(node.right);
+29        if (rightHeight == -1) {
+30            return -1; 
+31        }
+32        if (Math.abs(leftHeight - rightHeight) > 1) {
+33            return -1;
+34        }
+35        return Math.max(leftHeight, rightHeight) + 1;
+36    }
+37}
