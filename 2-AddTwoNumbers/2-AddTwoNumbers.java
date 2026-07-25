@@ -1,39 +1,26 @@
-// Last updated: 7/25/2026, 2:09:34 PM
+// Last updated: 7/25/2026, 2:10:18 PM
 1class Solution {
-2    public void nextPermutation(int[] nums) {
-3        int n = nums.length;
-4        int i = n - 2;
-5
-6        // Step 1: Find the first decreasing element from the right
-7        while (i >= 0 && nums[i] >= nums[i + 1]) {
-8            i--;
-9        }
-10
-11        // Step 2: If such an element exists, find the element just larger than nums[i] from the right
-12        if (i >= 0) {
-13            int j = n - 1;
-14            while (nums[j] <= nums[i]) {
-15                j--;
-16            }
-17            // Swap nums[i] and nums[j]
-18            swap(nums, i, j);
-19        }
-20
-21        // Step 3: Reverse the sequence from i + 1 to the end of the array
-22        reverse(nums, i + 1, n - 1);
-23    }
-24
-25    private void swap(int[] nums, int i, int j) {
-26        int temp = nums[i];
-27        nums[i] = nums[j];
-28        nums[j] = temp;
-29    }
-30
-31    private void reverse(int[] nums, int start, int end) {
-32        while (start < end) {
-33            swap(nums, start, end);
-34            start++;
-35            end--;
-36        }
-37    }
-38}
+2    public String countAndSay(int n) {
+3        String s = "1";
+4        
+5        for (int i = 1; i < n; i++) {
+6            StringBuilder current = new StringBuilder();
+7            int count = 1;
+8            
+9            for (int j = 0; j < s.length(); j++) {
+10                // If the next character is the same, increment count
+11                if (j + 1 < s.length() && s.charAt(j) == s.charAt(j + 1)) {
+12                    count++;
+13                } else {
+14                    // Append frequency followed by the character
+15                    current.append(count).append(s.charAt(j));
+16                    count = 1; // Reset count for the next character group
+17                }
+18            }
+19            
+20            s = current.toString();
+21        }
+22        
+23        return s;
+24    }
+25}
