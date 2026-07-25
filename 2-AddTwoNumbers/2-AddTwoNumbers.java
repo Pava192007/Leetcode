@@ -1,33 +1,26 @@
-// Last updated: 7/25/2026, 2:04:22 PM
+// Last updated: 7/25/2026, 2:06:14 PM
 1class Solution {
-2    public List<List<Integer>> threeSum(int[] nums) {
-3        List<List<Integer>> result = new ArrayList<>();
-4        Arrays.sort(nums);
+2    public int threeSumClosest(int[] nums, int target) {
+3        Arrays.sort(nums);
+4        int closestSum = nums[0] + nums[1] + nums[2];
 5        for (int i = 0; i < nums.length - 2; i++) {
-6            if (i > 0 && nums[i] == nums[i - 1]) {
-7                continue;
-8            }
-9            int left = i + 1;
-10            int right = nums.length - 1;
-11            while (left < right) {
-12                int sum = nums[i] + nums[left] + nums[right];
-13                if (sum == 0) {
-14                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
-15                    while (left < right && nums[left] == nums[left + 1]) {
-16                        left++;
-17                    }
-18                    while (left < right && nums[right] == nums[right - 1]) {
-19                        right--;
-20                    }
-21                    left++;
-22                    right--;
-23                } else if (sum < 0) {
-24                    left++; 
-25                } else {
-26                    right--; 
-27                }
-28            }
-29        }
-30        return result;
-31    }
-32}
+6            int left = i + 1;
+7            int right = nums.length - 1;
+8            while (left < right) {
+9                int currentSum = nums[i] + nums[left] + nums[right];
+10                if (currentSum == target) {
+11                    return currentSum;
+12                }
+13                if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
+14                    closestSum = currentSum;
+15                }
+16                if (currentSum < target) {
+17                    left++;
+18                } else {
+19                    right--;
+20                }
+21            }
+22        }
+23        return closestSum;
+24    }
+25}
