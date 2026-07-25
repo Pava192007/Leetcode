@@ -1,119 +1,36 @@
-// Last updated: 7/25/2026, 2:24:46 PM
-import java.util.*;
-
-class TopNode {
-    int x;
-    int h;
-    TopNode next;
-
-    TopNode() {
-    }
-
-    TopNode(int x, int h) {
-        this.x = x;
-        this.h = h;
-    }
-
-    void insert(TopNode n) {
-        n.next = next;
-        next = n;
-    }
-}
-
-class Solution {
-    static final int LEFT = 0, RIGHT = 1, HEIGHT = 2;
-
-    public List<List<Integer>> getSkyline(int[][] buildings) {
-        TopNode head = new TopNode(0, 0);
-        head.insert(new TopNode(Integer.MAX_VALUE, 0));
-        TopNode start = head;
-
-        for (int i = 0; i < buildings.length; i++) {
-            int[] b = buildings[i];
-            int bL = b[LEFT];
-            int bR = b[RIGHT];
-            int bH = b[HEIGHT];
-
-            while (bL >= start.next.x) {
-                start = start.next;
-            }
-
-            for (TopNode t = start; bR > t.x; t = t.next) {
-
-                if (bH <= t.h) {
-                    continue;
-                }
-
-                TopNode stop = t;
-
-                while (stop.next != null &&
-                        stop.next.x < bR &&
-                        stop.next.h <= bH) {
-                    stop = stop.next;
-                }
-
-                if (bL <= t.x) {
-
-                    if (bR >= stop.next.x) {
-                        t.next = stop.next;
-                        t.h = bH;
-                    } else if (t == stop) {
-                        t.insert(new TopNode(bR, t.h));
-                        t.h = bH;
-                        break;
-                    } else {
-                        stop.x = bR;
-                        t.h = bH;
-                        t.next = stop;
-                        break;
-                    }
-
-                } else {
-
-                    if (bR >= stop.next.x) {
-
-                        if (t == stop) {
-                            t.insert(new TopNode(bL, bH));
-                        } else {
-                            t.next = stop;
-                            stop.x = bL;
-                            stop.h = bH;
-                        }
-                        break;
-
-                    } else if (t == stop) {
-
-                        t.insert(new TopNode(bL, bH));
-                        t.next.insert(new TopNode(bR, t.h));
-                        break;
-
-                    } else {
-
-                        t.next = stop;
-                        t.insert(new TopNode(bL, bH));
-                        stop.x = bR;
-                        break;
-                    }
-                }
-
-                t = stop;
-            }
-        }
-
-        List<List<Integer>> skyline = new ArrayList<>();
-
-        if (head.h == 0) {
-            head = head.next;
-        }
-
-        while (head != null) {
-            int height = head.h;
-            skyline.add(List.of(head.x, height));
-
-            while ((head = head.next) != null && head.h == height) {
-            }
-        }
-
-        return skyline;
-    }
-}
+// Last updated: 7/25/2026, 2:28:09 PM
+1class Solution {
+2    public boolean containsNearbyAlmostDuplicate(int[] nums, int indexDiff, int valueDiff) {
+3        if (nums == null || nums.length < 2 || indexDiff <= 0 || valueDiff < 0) {
+4            return false;
+5        }
+6        Map<Long, Long> buckets = new HashMap<>();
+7        long w = (long) valueDiff + 1; 
+8        for (int i = 0; i < nums.length; i++) {
+9            long val = (long) nums[i];
+10            long bucketId = getBucketId(val, w);
+11            if (buckets.containsKey(bucketId)) {
+12                return true;
+13            }
+14            if (buckets.containsKey(bucketId - 1) && Math.abs(val - buckets.get(bucketId - 1)) <= valueDiff) {
+15                return true;
+16            }
+17            if (buckets.containsKey(bucketId + 1) && Math.abs(val - buckets.get(bucketId + 1)) <= valueDiff) {
+18                return true;
+19            }
+20            buckets.put(bucketId, val);
+21            if (i >= indexDiff) {
+22                long oldBucketId = getBucketId((long) nums[i - indexDiff], w);
+23                buckets.remove(oldBucketId);
+24            }
+25        }
+26        return false;
+27    }
+28    private long getBucketId(long val, long w) {
+29        if (val >= 0) {
+30            return val / w;
+31        } else {
+32            return (val + 1) / w - 1; 
+33        }
+34    }
+35}
