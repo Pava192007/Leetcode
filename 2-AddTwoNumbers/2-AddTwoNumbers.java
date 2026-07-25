@@ -1,38 +1,119 @@
-// Last updated: 7/25/2026, 2:24:26 PM
-1class Solution {
-2    public List<List<Integer>> getSkyline(int[][] buildings) {
-3        List<List<Integer>> result = new ArrayList<>();
-4        List<int[]> events = new ArrayList<>();
-5        for (int[] b : buildings) {
-6            events.add(new int[]{b[0], -b[2]});
-7            events.add(new int[]{b[1], b[2]});
-8        }
-9        Collections.sort(events, (a, b) -> {
-10            if (a[0] != b[0]) {
-11                return Integer.compare(a[0], b[0]);
-12            }
-13            return Integer.compare(a[1], b[1]);
-14        });
-15        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
-16        maxHeap.add(0); 
-17        int prevMaxHeight = 0;
-18        for (int[] event : events) {
-19            int x = event[0];
-20            int height = event[1];
-21            if (height < 0) {
-22                maxHeap.add(-height);
-23            } else {
-24                maxHeap.remove(height);
-25            }
-26            int currentMaxHeight = maxHeap.peek();
-27            if (currentMaxHeight != prevMaxHeight) {
-28                List<Integer> point = new ArrayList<>();
-29                point.add(x);
-30                point.add(currentMaxHeight);
-31                result.add(point);
-32                prevMaxHeight = currentMaxHeight;
-33            }
-34        }
-35        return result;
-36    }
-37}
+// Last updated: 7/25/2026, 2:24:46 PM
+import java.util.*;
+
+class TopNode {
+    int x;
+    int h;
+    TopNode next;
+
+    TopNode() {
+    }
+
+    TopNode(int x, int h) {
+        this.x = x;
+        this.h = h;
+    }
+
+    void insert(TopNode n) {
+        n.next = next;
+        next = n;
+    }
+}
+
+class Solution {
+    static final int LEFT = 0, RIGHT = 1, HEIGHT = 2;
+
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        TopNode head = new TopNode(0, 0);
+        head.insert(new TopNode(Integer.MAX_VALUE, 0));
+        TopNode start = head;
+
+        for (int i = 0; i < buildings.length; i++) {
+            int[] b = buildings[i];
+            int bL = b[LEFT];
+            int bR = b[RIGHT];
+            int bH = b[HEIGHT];
+
+            while (bL >= start.next.x) {
+                start = start.next;
+            }
+
+            for (TopNode t = start; bR > t.x; t = t.next) {
+
+                if (bH <= t.h) {
+                    continue;
+                }
+
+                TopNode stop = t;
+
+                while (stop.next != null &&
+                        stop.next.x < bR &&
+                        stop.next.h <= bH) {
+                    stop = stop.next;
+                }
+
+                if (bL <= t.x) {
+
+                    if (bR >= stop.next.x) {
+                        t.next = stop.next;
+                        t.h = bH;
+                    } else if (t == stop) {
+                        t.insert(new TopNode(bR, t.h));
+                        t.h = bH;
+                        break;
+                    } else {
+                        stop.x = bR;
+                        t.h = bH;
+                        t.next = stop;
+                        break;
+                    }
+
+                } else {
+
+                    if (bR >= stop.next.x) {
+
+                        if (t == stop) {
+                            t.insert(new TopNode(bL, bH));
+                        } else {
+                            t.next = stop;
+                            stop.x = bL;
+                            stop.h = bH;
+                        }
+                        break;
+
+                    } else if (t == stop) {
+
+                        t.insert(new TopNode(bL, bH));
+                        t.next.insert(new TopNode(bR, t.h));
+                        break;
+
+                    } else {
+
+                        t.next = stop;
+                        t.insert(new TopNode(bL, bH));
+                        stop.x = bR;
+                        break;
+                    }
+                }
+
+                t = stop;
+            }
+        }
+
+        List<List<Integer>> skyline = new ArrayList<>();
+
+        if (head.h == 0) {
+            head = head.next;
+        }
+
+        while (head != null) {
+            int height = head.h;
+            skyline.add(List.of(head.x, height));
+
+            while ((head = head.next) != null && head.h == height) {
+            }
+        }
+
+        return skyline;
+    }
+}
