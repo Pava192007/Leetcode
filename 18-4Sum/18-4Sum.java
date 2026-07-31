@@ -1,40 +1,49 @@
-// Last updated: 7/31/2026, 8:57:46 AM
-1class Solution {
-2    public List<List<Integer>> fourSum(int[] nums, int target) {
-3        List<List<Integer>> result = new ArrayList<>();
-4        Arrays.sort(nums);
-5        int n = nums.length;
-6        for (int i = 0; i < n - 3; i++) {
-7            if (i > 0 && nums[i] == nums[i - 1])
-8                continue;
-9            for (int j = i + 1; j < n - 2; j++) {
-10                if (j > i + 1 && nums[j] == nums[j - 1])
-11                    continue;
-12                int left = j + 1;
-13                int right = n - 1;
-14                while (left < right) {
-15                    long sum = (long) nums[i] + nums[j] + nums[left] + nums[right];
-16                    if (sum == target) {
-17                        result.add(Arrays.asList(
-18                                nums[i],
-19                                nums[j],
-20                                nums[left],
-21                                nums[right]
-22                        ));
-23                        left++;
-24                        right--;
-25                        while (left < right && nums[left] == nums[left - 1])
-26                            left++;
-27                        while (left < right && nums[right] == nums[right + 1])
-28                            right--;
-29                    } else if (sum < target) {
-30                        left++;
-31                    } else {
-32                        right--;
-33                    }
-34                }
-35            }
-36        }
-37        return result;
-38    }
-39}
+// Last updated: 7/31/2026, 8:58:09 AM
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        Arrays.sort(nums);
+        List<List<Integer>> ans= new ArrayList<>();
+        int n=nums.length;
+
+        for(int i=0; i<n-3; i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
+
+            //early check
+            if((long)nums[i] + nums[i+1] + nums[i+2] + nums[i+3] > target) break;
+
+            if((long)nums[i] + nums[n-1] + nums[n-2] + nums[n-3] < target) continue;
+
+            for(int j=i+1; j<n-2; j++){
+                if(j>i+1 && nums[j] == nums[j-1]) continue;
+
+                int l=j+1;
+                int r=n-1;
+
+                //early check for second pointer
+                if((long)nums[i]+nums[j]+nums[j+1]+nums[j+2] > target) break;
+
+                if((long)nums[i]+nums[j]+nums[n-1]+nums[n-2] < target) continue;
+
+                while(l<r){
+                    long sum = (long)nums[i] + nums[j] + nums[l] + nums[r];
+
+                    if(sum == target){
+                        ans.add(Arrays.asList(nums[i], nums[j], nums[l], nums[r]));
+
+                        while(l<r && nums[l]==nums[l+1]) l++;
+                        while(l<r && nums[r]==nums[r-1]) r--;
+
+                        l++;
+                        r--;
+                    }else if(sum<target){
+                        l++;
+                    }else{
+                        r--;
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+}
