@@ -1,23 +1,23 @@
-// Last updated: 7/31/2026, 9:35:22 AM
+// Last updated: 7/31/2026, 9:36:53 AM
 1class Solution {
-2    public int minCut(String s) {
-3        int n = s.length();
-4        int[] cuts = new int[n];
-5        for (int i = 0; i < n; i++) {
-6            cuts[i] = i;
-7        }
-8        for (int i = 0; i < n; i++) {
-9            expandAroundCenter(s, i, i, cuts);
-10            expandAroundCenter(s, i, i + 1, cuts);
-11        }
-12        return cuts[n - 1];
-13    }
-14    private void expandAroundCenter(String s, int left, int right, int[] cuts) {
-15        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
-16            int currentCut = (left == 0) ? 0 : cuts[left - 1] + 1;
-17            cuts[right] = Math.min(cuts[right], currentCut);
-18            left--;
-19            right++;
-20        }
+2    public int candy(int[] ratings) {
+3        int n = ratings.length;
+4        int[] candies = new int[n];
+5        Arrays.fill(candies, 1);
+6        for (int i = 1; i < n; i++) {
+7            if (ratings[i] > ratings[i - 1]) {
+8                candies[i] = candies[i - 1] + 1;
+9            }
+10        }
+11        for (int i = n - 2; i >= 0; i--) {
+12            if (ratings[i] > ratings[i + 1]) {
+13                candies[i] = Math.max(candies[i], candies[i + 1] + 1);
+14            }
+15        }
+16        int totalCandies = 0;
+17        for (int count : candies) {
+18            totalCandies += count;
+19        }
+20        return totalCandies;
 21    }
 22}
