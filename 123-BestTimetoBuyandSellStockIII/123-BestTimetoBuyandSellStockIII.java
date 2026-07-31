@@ -1,12 +1,11 @@
-// Last updated: 7/31/2026, 10:27:29 AM
+// Last updated: 7/31/2026, 10:28:33 AM
 1class Solution {
-2    public int titleToNumber(String columnTitle) {
-3        int result = 0;
-4        for (int i = 0; i < columnTitle.length(); i++) {
-5            char c = columnTitle.charAt(i);
-6            int value = c - 'A' + 1;
-7            result = result * 26 + value;
-8        }
-9        return result;
-10    }
-11}
+2    public int trailingZeroes(int n) {
+3        int count = 0;
+4        while (n > 0) {
+5            count += n / 5;
+6            n /= 5;
+7        }
+8        return count;
+9    }
+10}
