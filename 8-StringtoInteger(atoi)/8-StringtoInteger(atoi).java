@@ -1,38 +1,18 @@
-// Last updated: 8/4/2026, 8:59:25 AM
+// Last updated: 8/4/2026, 9:01:19 AM
 1class Solution {
-2    public int myAtoi(String s) {
-3        if (s == null || s.length() == 0) {
-4            return 0;
-5        }
-6        int i = 0;
-7        int n = s.length();
-8        while (i < n && s.charAt(i) == ' ') {
-9            i++;
-10        }
-11        if (i == n) {
-12            return 0;
+2    public ListNode removeNthFromEnd(ListNode head, int n) {
+3        ListNode dummy = new ListNode(0);
+4        dummy.next = head;
+5        ListNode fast = dummy;
+6        ListNode slow = dummy;
+7        for (int i = 0; i <= n; i++) {
+8            fast = fast.next;
+9        }
+10        while (fast != null) {
+11            fast = fast.next;
+12            slow = slow.next;
 13        }
-14        int sign = 1;
-15        if (s.charAt(i) == '+' || s.charAt(i) == '-') {
-16            sign = (s.charAt(i) == '-') ? -1 : 1;
-17            i++;
-18        }
-19        long total = 0;
-20        while (i < n) {
-21            char ch = s.charAt(i);
-22            if (ch < '0' || ch > '9') {
-23                break;
-24            }
-25            int digit = ch - '0';
-26            total = total * 10 + digit;
-27            if (sign * total > Integer.MAX_VALUE) {
-28                return Integer.MAX_VALUE;
-29            }
-30            if (sign * total < Integer.MIN_VALUE) {
-31                return Integer.MIN_VALUE;
-32            }
-33            i++;
-34        }
-35        return (int) (sign * total);
-36    }
-37}
+14        slow.next = slow.next.next;
+15        return dummy.next;
+16    }
+17}
